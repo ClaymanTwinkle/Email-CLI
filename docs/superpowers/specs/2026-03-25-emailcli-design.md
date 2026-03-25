@@ -30,6 +30,7 @@ emailcli/
 └── tests/
     ├── __init__.py
     ├── test_cli.py
+    ├── test_config.py
     ├── test_message.py
     └── test_sender.py
 ```
@@ -106,12 +107,12 @@ emailcli config show
 | `--to` | 是 | 是 | 收件人邮箱 |
 | `--subject` | 是 | 否 | 邮件主题 |
 | `--body` | 否* | 否 | 纯文本正文，`-` 表示从 stdin 读取 |
-| `--html` | 否* | 否 | HTML 正文字符串 |
-| `--html-file` | 否* | 否 | 从文件读取 HTML 正文 |
+| `--html` | 否* | 否 | HTML 正文字符串（与 `--html-file` 互斥） |
+| `--html-file` | 否* | 否 | 从文件读取 HTML 正文（与 `--html` 互斥） |
 | `--attach` | 否 | 是 | 附件文件路径 |
 | `--from` | 否 | 否 | 发件人（覆盖配置文件默认值） |
 
-*`--body` 和 `--html`/`--html-file` 至少提供一个。
+*`--body` 和 `--html`/`--html-file` 至少提供一个。`--from` 若未通过命令行提供，则必须在配置文件中设置 `from` 字段。
 
 ## 配置文件
 
