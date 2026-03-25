@@ -1,121 +1,123 @@
 # emailcli
 
-> 一个简洁的命令行邮件发送工具，支持纯文本、HTML 和文件附件。
+> A simple CLI tool for sending emails with plain text, HTML, and file attachments.
+>
+> [中文文档](README_CN.md)
 
-## 功能特性
+## Features
 
-- 发送纯文本 / HTML / 混合格式邮件
-- 携带多个文件和图片附件
-- 支持多收件人
-- SMTP 直连（支持 SSL / STARTTLS）
-- 交互式配置向导
-- 从 stdin 读取正文内容
+- Send plain text / HTML / mixed format emails
+- Attach multiple files and images
+- Multiple recipients support
+- Direct SMTP connection (SSL / STARTTLS)
+- Interactive configuration wizard
+- Read body content from stdin
 
-## 安装
+## Installation
 
 ```bash
-# 需要 Python >= 3.10 和 uv
+# Requires Python >= 3.10 and uv
 uv tool install -e .
 ```
 
-## 快速开始
+## Quick Start
 
-### 1. 初始化配置
+### 1. Initialize Configuration
 
 ```bash
 emailcli init
 ```
 
-按提示输入 SMTP 信息。以网易 163 邮箱为例：
+Follow the prompts to enter your SMTP settings. Example for Gmail:
 
-| 配置项 | 值 |
-|--------|-----|
-| From address | `yourname@163.com` |
-| SMTP host | `smtp.163.com` |
+| Field | Value |
+|-------|-------|
+| From address | `yourname@gmail.com` |
+| SMTP host | `smtp.gmail.com` |
 | SMTP port | `465` |
-| SMTP username | `yourname@163.com` |
-| SMTP password | 授权码（非登录密码） |
+| SMTP username | `yourname@gmail.com` |
+| SMTP password | App password |
 | Encryption | `ssl` |
 
-### 2. 发送邮件
+### 2. Send Emails
 
 ```bash
-# 纯文本
-emailcli send --to user@example.com --subject "你好" --body "Hello World"
+# Plain text
+emailcli send --to user@example.com --subject "Hello" --body "Hello World"
 
-# HTML 格式
-emailcli send --to user@example.com --subject "通知" \
-  --html "<h1>标题</h1><p>正文内容</p>"
+# HTML format
+emailcli send --to user@example.com --subject "Notice" \
+  --html "<h1>Title</h1><p>Body content</p>"
 
-# 携带附件
-emailcli send --to user@example.com --subject "报告" \
-  --body "请查收附件" \
+# With attachments
+emailcli send --to user@example.com --subject "Report" \
+  --body "Please see attachments" \
   --attach report.pdf \
   --attach photo.png
 
-# 多个收件人
+# Multiple recipients
 emailcli send \
   --to a@example.com \
   --to b@example.com \
-  --subject "群发" --body "大家好"
+  --subject "Broadcast" --body "Hello everyone"
 
-# 从文件读取 HTML 正文
+# HTML body from file
 emailcli send --to user@example.com --subject "Newsletter" \
   --html-file template.html
 
-# 从 stdin 读取正文
-echo "邮件内容" | emailcli send \
+# Read body from stdin
+echo "Content" | emailcli send \
   --to user@example.com --subject "Piped" --body -
 ```
 
-## 命令参考
+## Command Reference
 
 ### `emailcli send`
 
-| 参数 | 必填 | 可重复 | 说明 |
-|------|:----:|:------:|------|
-| `--to` | ✅ | ✅ | 收件人邮箱 |
-| `--subject` | ✅ | | 邮件主题 |
-| `--body` | | | 纯文本正文，`-` 从 stdin 读取 |
-| `--html` | | | HTML 正文（与 `--html-file` 互斥） |
-| `--html-file` | | | 从文件读取 HTML（与 `--html` 互斥） |
-| `--attach` | | ✅ | 附件文件路径 |
-| `--from` | | | 覆盖配置中的发件人地址 |
+| Option | Required | Repeatable | Description |
+|--------|:--------:|:----------:|-------------|
+| `--to` | ✅ | ✅ | Recipient email address |
+| `--subject` | ✅ | | Email subject |
+| `--body` | | | Plain text body, `-` reads from stdin |
+| `--html` | | | HTML body string (mutually exclusive with `--html-file`) |
+| `--html-file` | | | Read HTML body from file (mutually exclusive with `--html`) |
+| `--attach` | | ✅ | Attachment file path |
+| `--from` | | | Override sender address from config |
 
-> `--body` 和 `--html` / `--html-file` 至少提供一个。
+> At least one of `--body`, `--html`, or `--html-file` is required.
 
 ### `emailcli init`
 
-交互式创建配置文件 `~/.emailcli/config.yaml`。
+Interactively create the configuration file at `~/.emailcli/config.yaml`.
 
 ### `emailcli config show`
 
-查看当前配置（密码已脱敏）。
+Display current configuration (password is masked).
 
-## 配置文件
+## Configuration
 
-路径：`~/.emailcli/config.yaml`
+Path: `~/.emailcli/config.yaml`
 
 ```yaml
-from: yourname@163.com
+from: yourname@gmail.com
 smtp:
-  host: smtp.163.com
+  host: smtp.gmail.com
   port: 465
-  username: yourname@163.com
-  password: your-auth-code
+  username: yourname@gmail.com
+  password: your-app-password
   encryption: ssl  # ssl | starttls | none
 ```
 
-## 开发
+## Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 uv sync
 
-# 运行测试
+# Run tests
 uv run pytest -v
 
-# 本地运行
+# Run locally
 uv run emailcli --help
 ```
 
