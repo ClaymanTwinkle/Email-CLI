@@ -70,3 +70,49 @@ def send(to_addrs, subject, body, html_content, html_file_path, attachments, fro
     except EmailCliError as e:
         click.echo(f"Error: {e}", err=True)
         raise SystemExit(1)
+
+
+@cli.command()
+@click.option("--config-dir", default=None, type=click.Path(), hidden=True, help="Config directory (for testing).")
+def init(config_dir):
+    """Initialize emailcli configuration."""
+    import os
+
+    import yaml
+
+    cfg_dir = Path(config_dir) if config_dir else Path.home() / ".emailcli"
+    config_file = cfg_dir / "config.yaml"
+
+    if config_file.exists():
+        if not click.confirm(f"Config already exists at {config_file}. Overwrite?"):
+            click.echo("Aborted.")
+            return
+
+    click.echo("Setting up emailcli configuration...\n")
+
+    from_addr = click.prompt("From address (sender email)")
+    smtp_host = click.prompt("SMTP host")
+    smtp_port = click.prompt("SMTP port", type=int, default=465)
+    smtp_username = click.prompt("SMTP username")
+    smtp_password = click.prompt("SMTP password", hide_input=True)
+    smtp_encryption = click.prompt(
+        "Encryption (starttls/ssl/none)", default="ssl"
+    )
+
+    config_data = {
+        "from": from_addr,
+        "smtp": {
+            "host": smtp_host,
+            "port": smtp_port,
+            "username": smtp_username,
+            "password": smtp_password,
+            "encryption": smtp_encryption,
+        },
+    }
+
+    cfg_dir.mkdir(parents=True, exist_ok=True)
+    with open(config_file, "w") as f:
+        yaml.dump(config_data, f, default_flow_style=False)
+    os.chmod(config_file, 0o600)
+
+    click.echo(f"\nConfig saved to {config_file}")

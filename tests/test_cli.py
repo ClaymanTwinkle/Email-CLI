@@ -171,3 +171,28 @@ def test_send_html_and_html_file_exclusive(runner, config_home, tmp_path):
     ])
     assert result.exit_code != 0
     assert "mutually exclusive" in result.output.lower() or "exclusive" in result.output.lower()
+
+
+def test_init_creates_config(runner, tmp_path):
+    config_dir = tmp_path / ".emailcli"
+    result = runner.invoke(cli, [
+        "init",
+        "--config-dir", str(config_dir),
+    ], input="me@163.com\nsmtp.163.com\n465\nme@163.com\nmypassword\nssl\n")
+    assert result.exit_code == 0
+    assert (config_dir / "config.yaml").exists()
+
+
+def test_init_sets_file_permissions(runner, tmp_path):
+    import stat
+
+    config_dir = tmp_path / ".emailcli"
+    result = runner.invoke(cli, [
+        "init",
+        "--config-dir", str(config_dir),
+    ], input="me@163.com\nsmtp.163.com\n465\nme@163.com\nmypassword\nssl\n")
+    assert result.exit_code == 0
+
+    config_file = config_dir / "config.yaml"
+    mode = config_file.stat().st_mode & 0o777
+    assert mode == 0o600
