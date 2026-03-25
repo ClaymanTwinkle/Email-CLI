@@ -16,8 +16,11 @@
 ## Installation
 
 ```bash
-# Requires Python >= 3.10 and uv
-uv tool install -e .
+# From PyPI
+pip install email-cli-tool
+
+# Or with uv
+uv tool install email-cli-tool
 ```
 
 ## Quick Start

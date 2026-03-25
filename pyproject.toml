@@ -1,12 +1,35 @@
 [project]
-name = "emailcli"
+name = "email-cli-tool"
 version = "0.1.0"
-description = "CLI tool for sending emails with attachments"
+description = "A simple CLI tool for sending emails with plain text, HTML, and file attachments"
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.10"
+authors = [
+    { name = "ClaymanTwinkle" },
+]
+keywords = ["email", "cli", "smtp", "attachments"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Email",
+]
 dependencies = [
     "click>=8.0",
     "pyyaml>=6.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/ClaymanTwinkle/Email-CLI"
+Repository = "https://github.com/ClaymanTwinkle/Email-CLI"
+Issues = "https://github.com/ClaymanTwinkle/Email-CLI/issues"
 
 [project.scripts]
 emailcli = "emailcli.cli:cli"
